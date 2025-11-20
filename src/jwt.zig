@@ -208,7 +208,7 @@ pub fn encode(allocator: Allocator, claims: anytype, key: Key) EncodingError![]u
 
     const aa = arena.allocator();
 
-    const claims_json = try std.json.stringifyAlloc(aa, claims, .{});
+    const claims_json = try std.json.Stringify.valueAlloc(aa, claims, .{});
     const claims_base64 = try util.base64URLEncode(aa, claims_json);
 
     const header = .{
@@ -216,7 +216,7 @@ pub fn encode(allocator: Allocator, claims: anytype, key: Key) EncodingError![]u
         .typ = "JWT",
     };
 
-    const header_json = try std.json.stringifyAlloc(aa, header, .{});
+    const header_json = try std.json.Stringify.valueAlloc(aa, header, .{});
     const header_base64 = try util.base64URLEncode(aa, header_json);
 
     const message = try std.fmt.allocPrint(aa, "{s}.{s}", .{
